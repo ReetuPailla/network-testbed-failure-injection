@@ -1,0 +1,138 @@
+# Network Testbed Configuration (Docker-Compatible Version)
+
+topology:
+  spines:
+    - name: spine1
+      image: network-node:latest
+      management_ip: 172.20.0.10
+      ip: 172.20.0.10
+
+    - name: spine2
+      image: network-node:latest
+      management_ip: 172.20.0.11
+      ip: 172.20.0.11
+
+  leaves:
+    - name: leaf1
+      image: network-node:latest
+      management_ip: 172.20.0.21
+      ip: 172.20.0.21
+      hosts: [host1, host2]
+
+    - name: leaf2
+      image: network-node:latest
+      management_ip: 172.20.0.22
+      ip: 172.20.0.22
+      hosts: [host3, host4]
+
+    - name: leaf3
+      image: network-node:latest
+      management_ip: 172.20.0.23
+      ip: 172.20.0.23
+      hosts: [host5, host6]
+
+    - name: leaf4
+      image: network-node:latest
+      management_ip: 172.20.0.24
+      ip: 172.20.0.24
+      hosts: [host7, host8]
+
+  hosts:
+    - name: host1
+      image: network-node:latest
+      management_ip: 172.20.0.101
+      ip: 172.20.0.101
+      gateway: 172.20.0.1
+      leaf: leaf1
+
+    - name: host2
+      image: network-node:latest
+      management_ip: 172.20.0.102
+      ip: 172.20.0.102
+      gateway: 172.20.0.1
+      leaf: leaf1
+
+    - name: host3
+      image: network-node:latest
+      management_ip: 172.20.0.103
+      ip: 172.20.0.103
+      gateway: 172.20.0.1
+      leaf: leaf2
+
+    - name: host4
+      image: network-node:latest
+      management_ip: 172.20.0.104
+      ip: 172.20.0.104
+      gateway: 172.20.0.1
+      leaf: leaf2
+
+    - name: host5
+      image: network-node:latest
+      management_ip: 172.20.0.105
+      ip: 172.20.0.105
+      gateway: 172.20.0.1
+      leaf: leaf3
+
+    - name: host6
+      image: network-node:latest
+      management_ip: 172.20.0.106
+      ip: 172.20.0.106
+      gateway: 172.20.0.1
+      leaf: leaf3
+
+    - name: host7
+      image: network-node:latest
+      management_ip: 172.20.0.107
+      ip: 172.20.0.107
+      gateway: 172.20.0.1
+      leaf: leaf4
+
+    - name: host8
+      image: network-node:latest
+      management_ip: 172.20.0.108
+      ip: 172.20.0.108
+      gateway: 172.20.0.1
+      leaf: leaf4
+
+
+# Links are kept for structure (not used in simplified Docker mode)
+links:
+  - src: leaf1
+    dst: spine1
+  - src: leaf1
+    dst: spine2
+  - src: leaf2
+    dst: spine1
+  - src: leaf2
+    dst: spine2
+  - src: leaf3
+    dst: spine1
+  - src: leaf3
+    dst: spine2
+  - src: leaf4
+    dst: spine1
+  - src: leaf4
+    dst: spine2
+
+
+network:
+  management_subnet: 172.20.0.0/16
+  docker_network: mgmt
+
+
+failure_injection:
+  packet_loss_percent: 30
+  delay_ms: 100
+  delay_jitter_ms: 20
+
+
+monitoring:
+  prometheus_port: 9090
+  grafana_port: 3000
+  scrape_interval: 15s
+
+
+testing:
+  ping_count: 3
+  ping_timeout: 5
+  recovery_wait_seconds: 5

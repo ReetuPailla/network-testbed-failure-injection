@@ -1,0 +1,138 @@
+version: "3.9"
+
+services:
+
+  spine1:
+    build: .
+    container_name: spine1
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.10
+
+  spine2:
+    build: .
+    container_name: spine2
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.11
+
+  leaf1:
+    build: .
+    container_name: leaf1
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.21
+
+  leaf2:
+    build: .
+    container_name: leaf2
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.22
+
+  leaf3:
+    build: .
+    container_name: leaf3
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.23
+
+  leaf4:
+    build: .
+    container_name: leaf4
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.24
+
+  host1:
+    build: .
+    container_name: host1
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.101
+
+  host2:
+    build: .
+    container_name: host2
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.102
+
+  host3:
+    build: .
+    container_name: host3
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.103
+
+  host4:
+    build: .
+    container_name: host4
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.104
+
+  host5:
+    build: .
+    container_name: host5
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.105
+
+  host6:
+    build: .
+    container_name: host6
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.106
+
+  host7:
+    build: .
+    container_name: host7
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.107
+
+  host8:
+    build: .
+    container_name: host8
+    command: sleep infinity
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.108
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - mgmt
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - mgmt
+
+networks:
+  mgmt:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

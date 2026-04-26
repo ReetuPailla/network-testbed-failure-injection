@@ -1,0 +1,95 @@
+{
+  "title": "Network Testbed Overview",
+  "uid": "net-testbed-01",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "15s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Up Targets",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "count(up == 1)",
+          "legendFormat": "UP"
+        }
+      ],
+      "options": { "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "red", "value": 0 },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "graph",
+      "title": "Network Receive Bytes/sec (all nodes)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total{device!~'lo|docker.*|br.*'}[1m])",
+          "legendFormat": "{{instance}} {{device}} RX"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "graph",
+      "title": "Network Transmit Bytes/sec (all nodes)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        {
+          "expr": "rate(node_network_transmit_bytes_total{device!~'lo|docker.*|br.*'}[1m])",
+          "legendFormat": "{{instance}} {{device}} TX"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "graph",
+      "title": "Network Receive Errors/sec",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_errs_total{device!~'lo|docker.*|br.*'}[1m])",
+          "legendFormat": "{{instance}} {{device}} RX_ERR"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "graph",
+      "title": "Network Transmit Drops/sec",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        {
+          "expr": "rate(node_network_transmit_drop_total{device!~'lo|docker.*|br.*'}[1m])",
+          "legendFormat": "{{instance}} {{device}} TX_DROP"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Interface Status",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 18 },
+      "targets": [
+        {
+          "expr": "node_network_up{device!~'lo|docker.*|br.*'}",
+          "legendFormat": "{{instance}} {{device}}",
+          "instant": true
+        }
+      ],
+      "options": { "sortBy": [{ "displayName": "Value", "desc": false }] }
+    }
+  ]
+}

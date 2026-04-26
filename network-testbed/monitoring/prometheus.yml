@@ -1,0 +1,60 @@
+# prometheus.yml
+# Scrapes node_exporter from every testbed container.
+# node_exporter listens on :9100 inside each container.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: "network-testbed"
+
+rule_files: []
+
+scrape_configs:
+
+  # ── Prometheus self-monitoring ─────────────────────────────
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # ── Spine nodes ────────────────────────────────────────────
+  - job_name: "spines"
+    static_configs:
+      - targets:
+          - "172.20.0.11:9100"
+          - "172.20.0.12:9100"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: "172.20.0.11:.*"
+        target_label: instance
+        replacement: "spine1"
+      - source_labels: [__address__]
+        regex: "172.20.0.12:.*"
+        target_label: instance
+        replacement: "spine2"
+
+  # ── Leaf nodes ─────────────────────────────────────────────
+  - job_name: "leaves"
+    static_configs:
+      - targets:
+          - "172.20.0.21:9100"
+          - "172.20.0.22:9100"
+          - "172.20.0.23:9100"
+          - "172.20.0.24:9100"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: "172.20.0.(2[1-4]):.*"
+        target_label: instance
+
+  # ── Host nodes ─────────────────────────────────────────────
+  - job_name: "hosts"
+    static_configs:
+      - targets:
+          - "172.20.0.101:9100"
+          - "172.20.0.102:9100"
+          - "172.20.0.103:9100"
+          - "172.20.0.104:9100"
+          - "172.20.0.105:9100"
+          - "172.20.0.106:9100"
+          - "172.20.0.107:9100"
+          - "172.20.0.108:9100"
